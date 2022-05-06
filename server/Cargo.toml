@@ -1,0 +1,16 @@
+[package]
+name = "server"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "server"
+path = "src/bin/main.rs"
+
+[dependencies]
+actix-web = "4.0.1"
+app = { path = "../app" }
+bson = "2.2.0"
+serde = "1.0.130"
+serde_json = "1.0.68"
+chrono = { version = "0.4.19", features = ["serde"] }
