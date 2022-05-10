@@ -69,4 +69,12 @@ where
     pub async fn delete_by_id(&self, id: Bson) -> MongoResult<u64> {
         Ok(self.collection.delete_one(doc! {"_id": id}, None).await?.deleted_count)
     }
+
+    pub async fn delete_many(&self, filter: Document) -> MongoResult<u64> {
+        Ok(self.collection.delete_many(filter, None).await?.deleted_count)
+    }
+
+    pub async fn delete_one(&self, filter: Document) -> MongoResult<u64> {
+        Ok(self.collection.delete_one(filter, None).await?.deleted_count)
+    }
 }

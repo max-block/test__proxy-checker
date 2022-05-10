@@ -3,26 +3,23 @@ use mongodb::bson::oid::ObjectId;
 use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "lowercase")]
 pub enum ProxyType {
-    #[serde(rename_all = "lowercase")]
     Socks5,
-    #[serde(rename_all = "lowercase")]
-    Html,
+    Http,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "lowercase")]
 pub enum ProxyStatus {
-    #[serde(rename_all = "lowercase")]
     Unknown,
-    #[serde(rename_all = "lowercase")]
     Ok,
-    #[serde(rename_all = "lowercase")]
     Down,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Proxy {
-    #[serde(rename = "_id")]
+    #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
     pub id: Option<ObjectId>,
     pub r#type: ProxyType,
     pub status: ProxyStatus,
@@ -37,7 +34,7 @@ pub struct Proxy {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Source {
-    #[serde(rename = "_id")]
+    #[serde(rename = "_id", skip_serializing_if = "Option::is_none")]
     pub id: Option<ObjectId>,
     pub name: String,
     pub value: String,

@@ -1,5 +1,3 @@
-use std::sync::Arc;
-
 use actix_web::HttpServer;
 use actix_web::{web, App as HttpApp};
 
@@ -8,6 +6,7 @@ use app::App;
 use crate::router::{proxies, sources};
 
 mod router;
+mod error;
 
 pub async fn run() -> std::io::Result<()> {
     println!("restarted");

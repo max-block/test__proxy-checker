@@ -11,6 +11,9 @@ pub enum AppError {
 
     #[error("parse objectId error")]
     ParseObjectId(#[from] bson::oid::Error),
+
+    #[error("proxy not found")]
+    ProxyNotFound,
 }
 
 pub type AppResult<T> = Result<T, AppError>;
