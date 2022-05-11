@@ -25,5 +25,12 @@ pub struct Proxy {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Source {
     #[serde(rename = "_id")]
-    pub id: Option<String>,
+    pub id: String, // represents name
+    pub url: String,
+    pub protocol: Option<String>,
+    pub username: Option<String>,
+    pub password: Option<String>,
+    pub port: Option<u16>,
+    pub created_at: DateTime<Utc>,
+    pub checked_at: Option<DateTime<Utc>>,
 }

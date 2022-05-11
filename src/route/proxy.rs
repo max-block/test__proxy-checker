@@ -1,33 +1,23 @@
 use crate::app::App;
 use crate::service::CreateProxyParams;
+use crate::util::{json_result, JsonResult};
 use actix_web::web::{Data, Json};
 use actix_web::{delete, get, post, web, Scope};
-use mongodb::bson::{doc, Bson};
-use serde_json::{json, Value};
-
-use crate::error::AppError;
-
-type JsonResult = Result<Json<Value>, AppError>;
-type BsonResult = Result<Json<Bson>, AppError>;
+use mongodb::bson::doc;
 
 #[get("")]
 async fn get_proxies(app: Data<App>) -> JsonResult {
-    println!("z1");
-    let res = app.db.proxy.find(doc! {}, "", 1).await?;
-    println!("z2");
-    Ok(Json(serde_json::to_value(res).unwrap()))
+    json_result(app.db.proxy.find(doc! {}, "", 1).await?)
 }
 
 #[post("")]
-async fn create_proxy(app: Data<App>, params: Json<CreateProxyParams>) -> BsonResult {
-    let res = app.proxy_service.create(params.0).await?;
-    Ok(Json(res))
+async fn create_proxy(app: Data<App>, params: Json<CreateProxyParams>) -> JsonResult {
+    json_result(app.proxy_service.create(params.0).await?)
 }
 
 #[delete("")]
 async fn delete_proxies(app: Data<App>) -> JsonResult {
-    let res = app.db.proxy.delete_many(doc! {}).await?;
-    Ok(Json(json!({ "deleted": res })))
+    json_result(app.db.proxy.delete_many(doc! {}).await?)
 }
 
 pub fn proxies_scope() -> Scope {
