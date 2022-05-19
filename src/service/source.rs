@@ -3,10 +3,10 @@ use mongodb::bson::Bson;
 use serde::{Serialize, Deserialize};
 
 use crate::{
-    db::{bson_object_id_from_str, model::Source, Db},
-    error::AppResult,
+    db::{ model::Source, Db},
+    error::{AppResult, AppError},
 };
-use std::sync::Arc;
+use std::{sync::Arc, net::Ipv4Addr, str::FromStr};
 
 pub struct SourceService {
     db: Arc<Db>,
@@ -43,12 +43,28 @@ impl SourceService {
     }
 
     pub async fn check(&self, id: String) -> AppResult<()> {
-        let _source = self.db.source.find_by_id(id.into()).await?;
-        dbg!(_source);
+        let source = self.db.source.find_by_id(id.into()).await?.ok_or(AppError::NotFound)?;
+        let res = reqwest::get(source.url).await?.text().await?;
+        let ip_list = Self::search_ip(res);
+
+        dbg!(ip_list);
         Ok(())
     }
 
     pub async fn create(&self, params: CreateSourceParams) -> AppResult<Bson> {
         Ok(self.db.source.insert(&params.into()).await?)
     }
+
+    fn search_ip(data: String) -> Vec<String> {
+        let mut result = vec![];    
+        for word in data.split_whitespace() {
+            if let Ok(_) = Ipv4Addr::from_str(&word) {
+                result.push(word.into());
+            }
+        }
+        result
+    }
 }
+
+
+

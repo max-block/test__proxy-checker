@@ -39,7 +39,7 @@ impl ProxyService {
     pub async fn check(&self, id: String) -> Result<ProxyStatus,   AppError> {
         let res = self.db.proxy.find_by_id(bson_object_id_from_str(id)?).await?;
         if res.is_none() {
-            return Err(AppError::ProxyNotFound);
+            return Err(AppError::NotFound);
         }
 
         todo!()

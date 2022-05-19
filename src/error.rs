@@ -10,11 +10,17 @@ pub enum AppError {
     #[error("mongo error")]
     MongoError(#[from] mongodb::error::Error),
 
+    #[error("reqwest error")]
+    ReqwestError(#[from] reqwest::Error),
+
     #[error("parse objectId error")]
     ParseObjectId(#[from] bson::oid::Error),
 
-    #[error("proxy not found")]
-    ProxyNotFound,
+    #[error("not found")]
+    NotFound,
+
+    
+
 }
 
 impl ResponseError for AppError {}
